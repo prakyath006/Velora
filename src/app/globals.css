@@ -1,0 +1,170 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.75);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 2.5);
+  --radius-3xl: calc(var(--radius) * 3);
+  --radius-4xl: calc(var(--radius) * 3.5);
+}
+
+/*
+ * Linear-inspired Design System
+ * ─────────────────────────────
+ * Deep dark surfaces, lavender-blue accent, hairline borders.
+ * Surface ladder: canvas → surface-1 → surface-2 → surface-3.
+ * Primary: #5e6ad2 (lavender-blue).
+ */
+
+/* ── Light Mode (Inverse Linear) ── */
+:root {
+  --background: #fafafa;
+  --foreground: #1a1a2e;
+  --card: #ffffff;
+  --card-foreground: #1a1a2e;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a2e;
+  --primary: #5e6ad2;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f5;
+  --secondary-foreground: #1a1a2e;
+  --muted: #f0f0f5;
+  --muted-foreground: #64748b;
+  --accent: #f0f0f5;
+  --accent-foreground: #1a1a2e;
+  --destructive: #e03131;
+  --border: #e2e4ea;
+  --input: #e2e4ea;
+  --ring: #5e6ad2;
+  --radius: 0.5rem;
+  /* Charts — Linear-inspired palette */
+  --chart-1: #5e6ad2;
+  --chart-2: #27a644;
+  --chart-3: #f59e0b;
+  --chart-4: #ec4899;
+  --chart-5: #06b6d4;
+  /* Sidebar — clean light */
+  --sidebar: #f5f5f8;
+  --sidebar-foreground: #1a1a2e;
+  --sidebar-primary: #5e6ad2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eaeaf0;
+  --sidebar-accent-foreground: #1a1a2e;
+  --sidebar-border: #e2e4ea;
+  --sidebar-ring: #5e6ad2;
+}
+
+/* ── Dark Mode (Linear Canonical) ── */
+.dark {
+  --background: #0a0a0f;
+  --foreground: #f0f1f3;
+  --card: #12121a;
+  --card-foreground: #f0f1f3;
+  --popover: #12121a;
+  --popover-foreground: #f0f1f3;
+  --primary: #5e6ad2;
+  --primary-foreground: #ffffff;
+  --secondary: #1a1a26;
+  --secondary-foreground: #d0d6e0;
+  --muted: #1a1a26;
+  --muted-foreground: #8a8f98;
+  --accent: #1a1a26;
+  --accent-foreground: #d0d6e0;
+  --destructive: #e03131;
+  --border: #23252e;
+  --input: #23252e;
+  --ring: #5e6ad2;
+  /* Charts */
+  --chart-1: #828fff;
+  --chart-2: #27a644;
+  --chart-3: #f59e0b;
+  --chart-4: #ec4899;
+  --chart-5: #06b6d4;
+  /* Sidebar — deep dark */
+  --sidebar: #0e0e16;
+  --sidebar-foreground: #d0d6e0;
+  --sidebar-primary: #5e6ad2;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1a1a26;
+  --sidebar-accent-foreground: #f0f1f3;
+  --sidebar-border: #23252e;
+  --sidebar-ring: #5e6ad2;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+  }
+  /* Linear-style tight headings */
+  h1 {
+    letter-spacing: -0.03em;
+  }
+  h2 {
+    letter-spacing: -0.02em;
+  }
+  h3, h4 {
+    letter-spacing: -0.01em;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  aside, header, nav, button:not(.print-keep), .no-print {
+    display: none !important;
+  }
+  main, .flex-1, .overflow-y-auto {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
