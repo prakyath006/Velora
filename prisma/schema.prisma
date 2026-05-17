@@ -1,0 +1,261 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── Enums ───────────────────────────────────────────────────
+
+enum UserRole {
+  employee
+  manager
+  admin
+}
+
+enum GoalSheetStatus {
+  draft
+  submitted
+  approved
+  returned
+}
+
+enum UoMType {
+  min_numeric
+  max_numeric
+  min_percent
+  max_percent
+  timeline
+  zero
+}
+
+enum GoalStatus {
+  not_started
+  on_track
+  completed
+}
+
+enum CycleStatus {
+  upcoming
+  active
+  closed
+}
+
+enum AuditAction {
+  goal_created
+  goal_updated
+  goal_deleted
+  goal_sheet_submitted
+  goal_sheet_approved
+  goal_sheet_returned
+  goal_sheet_unlocked
+  achievement_updated
+  target_modified_post_lock
+  weightage_modified_post_lock
+  checkin_comment_added
+  shared_goal_pushed
+}
+
+// ── Users & Organization ────────────────────────────────────
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  users User[]
+
+  @@map("departments")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  role         UserRole @default(employee)
+  designation  String   @default("")
+  departmentId String   @map("department_id")
+  managerId    String?  @map("manager_id")
+  avatarUrl    String?  @map("avatar_url")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  department Department @relation(fields: [departmentId], references: [id])
+  manager    User?      @relation("ManagerReports", fields: [managerId], references: [id])
+  reports    User[]     @relation("ManagerReports")
+
+  goalSheets       GoalSheet[]
+  approvedSheets   GoalSheet[]      @relation("ApprovedBy")
+  checkinComments  CheckinComment[]
+  auditLogs        AuditLog[]
+  notifications    Notification[]
+  quarterlyUpdates QuarterlyUpdate[]
+  escalationLogs   EscalationLog[]
+
+  @@map("users")
+}
+
+// ── Performance Cycles ──────────────────────────────────────
+
+model Cycle {
+  id               String      @id @default(uuid())
+  name             String
+  financialYear    String      @map("financial_year")
+  status           CycleStatus @default(upcoming)
+  goalSettingStart DateTime    @map("goal_setting_start")
+  goalSettingEnd   DateTime    @map("goal_setting_end")
+  q1Start          DateTime    @map("q1_start")
+  q1End            DateTime    @map("q1_end")
+  q2Start          DateTime    @map("q2_start")
+  q2End            DateTime    @map("q2_end")
+  q3Start          DateTime    @map("q3_start")
+  q3End            DateTime    @map("q3_end")
+  q4Start          DateTime    @map("q4_start")
+  q4End            DateTime    @map("q4_end")
+  createdAt        DateTime    @default(now()) @map("created_at")
+
+  goalSheets GoalSheet[]
+
+  @@map("cycles")
+}
+
+// ── Goal Sheets ─────────────────────────────────────────────
+
+model GoalSheet {
+  id            String          @id @default(uuid())
+  employeeId    String          @map("employee_id")
+  cycleId       String          @map("cycle_id")
+  status        GoalSheetStatus @default(draft)
+  submittedAt   DateTime?       @map("submitted_at")
+  approvedAt    DateTime?       @map("approved_at")
+  approvedById  String?         @map("approved_by_id")
+  returnedAt    DateTime?       @map("returned_at")
+  returnComment String?         @map("return_comment")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  employee   User  @relation(fields: [employeeId], references: [id])
+  cycle      Cycle @relation(fields: [cycleId], references: [id])
+  approvedBy User? @relation("ApprovedBy", fields: [approvedById], references: [id])
+
+  goals           Goal[]
+  checkinComments CheckinComment[]
+
+  @@unique([employeeId, cycleId])
+  @@map("goal_sheets")
+}
+
+// ── Goals (Master) ──────────────────────────────────────────
+
+model Goal {
+  id             String     @id @default(uuid())
+  goalSheetId    String     @map("goal_sheet_id")
+  thrustArea     String     @map("thrust_area")
+  title          String
+  description    String     @default("")
+  uomType        UoMType    @map("uom_type")
+  target         Float      @default(0)
+  targetDate     DateTime?  @map("target_date")
+  weightage      Float
+  isShared       Boolean    @default(false) @map("is_shared")
+  sharedGoalId   String?    @map("shared_goal_id")
+  primaryOwnerId String?   @map("primary_owner_id")
+  status         GoalStatus @default(not_started)
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  goalSheet  GoalSheet @relation(fields: [goalSheetId], references: [id], onDelete: Cascade)
+  sharedFrom Goal?     @relation("SharedGoals", fields: [sharedGoalId], references: [id])
+  sharedTo   Goal[]    @relation("SharedGoals")
+
+  quarterlyUpdates QuarterlyUpdate[]
+
+  @@map("goals")
+}
+
+// ── Quarterly Updates (Achievements) ────────────────────────
+
+model QuarterlyUpdate {
+  id             String     @id @default(uuid())
+  goalId         String     @map("goal_id")
+  quarter        String     // Q1, Q2, Q3, Q4
+  actualValue    Float?     @map("actual_value")
+  completionDate DateTime?  @map("completion_date")
+  status         GoalStatus @default(not_started)
+  computedScore  Float?     @map("computed_score")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+  updatedById    String     @map("updated_by_id")
+
+  goal      Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+  updatedBy User @relation(fields: [updatedById], references: [id])
+
+  @@unique([goalId, quarter])
+  @@map("quarterly_updates")
+}
+
+// ── Check-in Comments ───────────────────────────────────────
+
+model CheckinComment {
+  id          String   @id @default(uuid())
+  goalSheetId String   @map("goal_sheet_id")
+  managerId   String   @map("manager_id")
+  quarter     String
+  comment     String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  goalSheet GoalSheet @relation(fields: [goalSheetId], references: [id], onDelete: Cascade)
+  manager   User      @relation(fields: [managerId], references: [id])
+
+  @@map("checkin_comments")
+}
+
+// ── Audit Logs ──────────────────────────────────────────────
+
+model AuditLog {
+  id         String      @id @default(uuid())
+  userId     String      @map("user_id")
+  entityType String      @map("entity_type")
+  entityId   String      @map("entity_id")
+  action     AuditAction
+  details    String      @default("")
+  oldValue   String?     @map("old_value")
+  newValue   String?     @map("new_value")
+  createdAt  DateTime    @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}
+
+// ── Notifications ───────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  title     String
+  message   String
+  type      String   @default("info") // info, warning, success, action
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("notifications")
+}
+
+// ── Escalation Logs ─────────────────────────────────────────
+
+model EscalationLog {
+  id           String   @id @default(uuid())
+  ruleType     String   @map("rule_type") // goal_not_submitted, approval_pending, checkin_overdue
+  severity     String   @default("warning") // info, warning, critical
+  targetUserId String   @map("target_user_id")
+  message      String
+  resolved     Boolean  @default(false)
+  resolvedAt   DateTime? @map("resolved_at")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  targetUser User @relation(fields: [targetUserId], references: [id])
+
+  @@map("escalation_logs")
+}
