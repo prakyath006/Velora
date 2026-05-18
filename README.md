@@ -11,28 +11,28 @@ Velora is a full-featured, production-grade Goal Setting & Tracking Portal that 
 
 ```mermaid
 graph TD
-    classDef layer fill:#f1f5f9,stroke:#94a3b8,stroke-width:1px,color:#334155,rx:10,ry:10;
-    classDef nodeBox fill:#ffffff,stroke:#64748b,stroke-width:1px,color:#0f172a,rx:5,ry:5;
-    classDef accent fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#312e81,rx:5,ry:5;
-    classDef db fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#14532d;
+    classDef layer fill:#f8fafc,stroke:#cbd5e1,stroke-width:2px,color:#334155,rx:10,ry:10;
+    classDef nodeBox fill:#ffffff,stroke:#94a3b8,stroke-width:1px,color:#0f172a,rx:5,ry:5;
+    classDef accent fill:#eef2ff,stroke:#818cf8,stroke-width:2px,color:#312e81,rx:5,ry:5;
+    classDef db fill:#f0fdf4,stroke:#4ade80,stroke-width:2px,color:#14532d;
 
     %% Presentation Layer
     subgraph Presentation ["📱 Presentation Layer"]
-        UI["🖥️ Employee, Manager & Admin Portals"]:::nodeBox
-        Eval["🧪 Evaluation Workspace"]:::nodeBox
+        UI["🖥️ Employee, Manager &<br/>Admin Portals"]:::nodeBox
+        Eval["🧪 Role-Based Evaluation<br/>Workspace"]:::nodeBox
     end
 
     %% Infrastructure wraps Business Logic
     subgraph Infra ["☁️ Infrastructure Layer (Google Cloud Run)"]
         subgraph Logic ["⚙️ Business Logic Layer"]
             SA["⚡ Next.js Server Actions"]:::accent
-            Modules["🎯 Goals | ✅ Approvals | 📅 Check-ins | 📊 Reports | 🛡️ RBAC"]:::nodeBox
+            Modules["🎯 Goal Management<br/>✅ Approval Workflow<br/>📅 Quarterly Check-ins<br/>📊 Reporting Engine<br/>🛡️ Audit Logging & RBAC"]:::nodeBox
         end
     end
 
     %% Data Layer
     subgraph Data ["🗄️ Data Layer"]
-        ORM["🔗 Prisma ORM"]:::nodeBox
+        ORM["🔗 Prisma ORM (Support)"]:::nodeBox
         DB[("🐘 Supabase PostgreSQL")]:::db
     end
 
