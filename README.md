@@ -11,38 +11,39 @@ Velora is a full-featured, production-grade Goal Setting & Tracking Portal that 
 
 ```mermaid
 graph TD
+    classDef layer fill:#f8fafc,stroke:#cbd5e1,stroke-width:2px,color:#334155,rx:10,ry:10;
+    classDef nodeBox fill:#ffffff,stroke:#94a3b8,stroke-width:1px,color:#0f172a,rx:5,ry:5;
+    classDef accent fill:#eef2ff,stroke:#818cf8,stroke-width:2px,color:#312e81,rx:5,ry:5;
+    classDef db fill:#f0fdf4,stroke:#4ade80,stroke-width:2px,color:#14532d;
+
     %% Presentation Layer
-    subgraph "Presentation Layer"
-        UI["Next.js Frontend (Employee / Manager / Admin)"]
-        Eval["Seeded Evaluation Workspace (Persona Switching)"]
-        UI -.- Eval
+    subgraph Presentation ["📱 Presentation Layer"]
+        UI["🖥️ Employee, Manager & Admin Portals"]:::nodeBox
+        Eval["🧪 Role-Based Evaluation Workspace"]:::nodeBox
     end
 
-    %% Business Logic Layer
-    subgraph "Business Logic Layer"
-        SA["Next.js Server Actions & APIs"]
-        Modules["Goal Management | Approval Workflow | Quarterly Check-ins | Reporting | Audit Logging"]
-        SA --- Modules
+    %% Infrastructure wraps Business Logic
+    subgraph Infra ["☁️ Infrastructure Layer (Google Cloud Run)"]
+        subgraph Logic ["⚙️ Business Logic Layer"]
+            SA["⚡ Next.js Server Actions"]:::accent
+            Modules["🎯 Goal Management<br/>✅ Approval Workflow<br/>📅 Quarterly Check-ins<br/>📊 Reporting Engine<br/>🛡️ Audit Logging & RBAC"]:::nodeBox
+        end
     end
 
     %% Data Layer
-    subgraph "Data Layer"
-        ORM["Prisma ORM"]
-        DB[("Supabase PostgreSQL")]
+    subgraph Data ["🗄️ Data Layer"]
+        ORM["🔗 Prisma ORM (Support)"]:::nodeBox
+        DB[("🐘 Supabase PostgreSQL")]:::db
     end
 
-    %% Infrastructure Hosting
-    subgraph "Infrastructure"
-        GCR["Application Hosting: Google Cloud Run (Serverless Container)"]
-    end
-
-    %% Flow
+    %% Connections
     UI --> SA
+    Eval -.-> SA
+    SA --> Modules
     Modules --> ORM
     ORM --> DB
-    
-    %% Hosting mapping
-    SA -.-> GCR
+
+    class Presentation,Infra,Logic,Data layer;
 ```
 
 | Layer | Technology | Purpose |
