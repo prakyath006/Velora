@@ -24,9 +24,9 @@ graph TD
 
     %% Infrastructure wraps Business Logic
     subgraph Infra ["☁️ Infrastructure Layer (Google Cloud Run)"]
-        subgraph Logic ["⚙️ Business Logic Layer<br/>(Workflow-driven enterprise goal management system)"]
+        subgraph Logic ["⚙️ Business Logic Layer"]
             SA["⚡ Next.js Server Actions"]:::accent
-            Modules["🎯 Goal Management<br/>✅ Approval Workflow<br/>📅 Quarterly Check-ins<br/>📊 Reporting Engine<br/>🛡️ Audit Logging & RBAC"]:::nodeBox
+            Modules["🎯 Goals | ✅ Approvals | 📅 Check-ins | 📊 Reports | 🛡️ RBAC"]:::nodeBox
         end
     end
 
