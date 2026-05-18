@@ -4,6 +4,9 @@
 
 Velora is a full-featured, production-grade Goal Setting & Tracking Portal that supports the complete lifecycle of employee performance goals — from creation, approval, and quarterly check-ins to analytics, escalation, and audit governance.
 
+**🌐 Live Demo:** [https://velora-704569764751.us-central1.run.app](https://velora-704569764751.us-central1.run.app)
+*(Deployed on Google Cloud Run)*
+
 ## Architecture
 
 ![Architecture Diagram](public/architecture.png)
@@ -15,10 +18,10 @@ Velora is a full-featured, production-grade Goal Setting & Tracking Portal that 
 | **ORM** | Prisma 7 | Type-safe database access |
 | **Database** | PostgreSQL (Supabase) | Cloud-hosted, Mumbai region |
 | **Charts** | Recharts | Analytics visualizations |
-| **Hosting** | Vercel | Edge deployment, zero-config |
+| **Hosting** | Google Cloud Run | Serverless container deployment |
 
 ### Cost Optimization Strategy
-- **$0 infrastructure cost** — Supabase free tier (500MB) + Vercel free tier
+- **$0 infrastructure cost** — Supabase free tier (500MB) + Cloud Run free tier
 - **No external API calls** — all computation is server-side
 - **Connection pooling** via Supabase Pooler (PgBouncer)
 - **Static page optimization** — Next.js pre-renders where possible
@@ -86,8 +89,8 @@ Velora is a full-featured, production-grade Goal Setting & Tracking Portal that 
 ### Installation
 
 ```bash
-git clone https://github.com/prakyath006/AtomQuest.git
-cd AtomQuest
+git clone https://github.com/prakyath006/Velora.git
+cd Velora
 npm install
 ```
 
