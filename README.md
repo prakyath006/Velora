@@ -11,28 +11,38 @@ Velora is a full-featured, production-grade Goal Setting & Tracking Portal that 
 
 ```mermaid
 graph TD
-    %% Client Layer
-    subgraph "Client Layer"
-        Users["Users (Employee, Manager, Admin)"]
-        UI["Next.js React UI"]
-        Users -->|HTTPS| UI
+    %% Presentation Layer
+    subgraph "Presentation Layer"
+        UI["Next.js Frontend (Employee / Manager / Admin)"]
+        Eval["Seeded Evaluation Workspace (Persona Switching)"]
+        UI -.- Eval
     end
 
-    %% Application Layer
-    subgraph "Application Layer"
-        SA["Next.js Server Actions (API)"]
-        ORM["Prisma ORM"]
-        UI -->|Fetch| SA
-        SA -->|Queries| ORM
+    %% Business Logic Layer
+    subgraph "Business Logic Layer"
+        SA["Next.js Server Actions & APIs"]
+        Modules["Goal Management | Approval Workflow | Quarterly Check-ins | Reporting | Audit Logging"]
+        SA --- Modules
     end
 
     %% Data Layer
-    subgraph "Data & Infra (Google Cloud)"
-        CloudRun["Google Cloud Run (Serverless)"]
-        DB[("PostgreSQL (Supabase)")]
-        SA -.->|Hosted on| CloudRun
-        ORM -->|Connection Pooler| DB
+    subgraph "Data Layer"
+        ORM["Prisma ORM"]
+        DB[("Supabase PostgreSQL")]
     end
+
+    %% Infrastructure Hosting
+    subgraph "Infrastructure"
+        GCR["Application Hosting: Google Cloud Run (Serverless Container)"]
+    end
+
+    %% Flow
+    UI --> SA
+    Modules --> ORM
+    ORM --> DB
+    
+    %% Hosting mapping
+    SA -.-> GCR
 ```
 
 | Layer | Technology | Purpose |
