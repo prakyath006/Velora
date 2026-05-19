@@ -133,12 +133,12 @@ export default function LandingPage() {
             <div className="h-4 w-px bg-border/80" />
             <Link href="/login">
               <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground text-xs font-medium">
-                Sign In
+                Select Persona
               </Button>
             </Link>
             <Link href="/dashboard">
               <Button size="sm" className="shadow-sm text-xs font-semibold px-4">
-                Open Portal <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+                Go to Dashboard <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Button>
             </Link>
           </div>
@@ -158,10 +158,10 @@ export default function LandingPage() {
             </p>
             <div className="flex items-center gap-3 mt-6">
               <Link href="/dashboard">
-                <Button className="shadow-sm">Open Portal <ArrowRight className="w-4 h-4 ml-1.5" /></Button>
+                <Button className="shadow-sm">Go to Dashboard <ArrowRight className="w-4 h-4 ml-1.5" /></Button>
               </Link>
               <Link href="/login">
-                <Button variant="outline">Sign In</Button>
+                <Button variant="outline">Select Persona</Button>
               </Link>
             </div>
             <div className="flex items-center gap-4 mt-8 text-xs text-muted-foreground">
