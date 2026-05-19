@@ -122,16 +122,25 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
-        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <Image src="/logo.png" alt="Velora" width={28} height={28} className="rounded" />
-            <span className="font-bold tracking-tight">Velora</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Link href="/login"><Button variant="ghost" size="sm">Sign In</Button></Link>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/40">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+            <Image src="/logo.png" alt="Velora" width={32} height={32} className="rounded-lg shadow-sm" />
+            <span className="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/80">Velora</span>
+          </Link>
+          <div className="flex items-center gap-4">
             <ThemeToggle />
-            <Link href="/dashboard"><Button size="sm">Open Portal <ArrowRight className="w-3.5 h-3.5 ml-1.5" /></Button></Link>
+            <div className="h-4 w-px bg-border/80" />
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground text-xs font-medium">
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/dashboard">
+              <Button size="sm" className="shadow-sm text-xs font-semibold px-4">
+                Open Portal <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </nav>
