@@ -337,6 +337,11 @@
       }
       .persona-card {
         page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .page-break {
+        page-break-before: always;
+        break-before: page;
       }
     }
   </style>
@@ -375,7 +380,7 @@
       </div>
     </div>
 
-    <h2>📐 2. System Architecture</h2>
+    <h2 class="page-break">📐 2. System Architecture</h2>
     <div class="arch-diagram">
       <!-- Presentation -->
       <div class="arch-layer">
@@ -412,7 +417,7 @@
       </div>
     </div>
 
-    <h2>🧪 3. Persona Evaluation Roadmaps</h2>
+    <h2 class="page-break">🧪 3. Persona Evaluation Roadmaps</h2>
 
     <!-- Employee -->
     <div class="persona-card employee-card">
