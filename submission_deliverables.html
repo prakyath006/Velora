@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Velora — Hackathon Submission Deliverables</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #5e6ad2;
+      --primary-light: #eef2ff;
+      --foreground: #0f172a;
+      --muted: #475569;
+      --border: #e2e8f0;
+      --bg-light: #f8fafc;
+      
+      --employee: #2563eb;
+      --employee-bg: #eff6ff;
+      --manager: #7c3aed;
+      --manager-bg: #f5f3ff;
+      --admin: #ea580c;
+      --admin-bg: #fff7ed;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--foreground);
+      line-height: 1.6;
+      background-color: #f1f5f9;
+      padding: 40px 20px;
+    }
+
+    .page {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 50px 60px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+      border: 1px border var(--border);
+    }
+
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 30px;
+      margin-bottom: 40px;
+    }
+
+    .badge-top {
+      display: inline-block;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 6px 12px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--foreground);
+      line-height: 1.25;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    h2 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 35px;
+      margin-bottom: 16px;
+      color: var(--foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .link-group {
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .link-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .link-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .link-item:first-child {
+      padding-top: 0;
+    }
+
+    .link-label {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .link-value a {
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 14px;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    .link-value a:hover {
+      border-bottom-color: var(--primary);
+    }
+
+    /* ─── Custom CSS Architecture Diagram ───────────────────────── */
+    .arch-diagram {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      background: var(--bg-light);
+      margin-bottom: 30px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .arch-layer {
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .arch-layer:last-child {
+      margin-bottom: 0;
+    }
+
+    .arch-layer-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #64748b;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .arch-boxes {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .arch-box {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 10px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    .arch-box.accent {
+      background: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .arch-box.db {
+      background: #f0fdf4;
+      border-color: #22c55e;
+      color: #14532d;
+      font-weight: 600;
+    }
+
+    .arch-infra-wrap {
+      border: 2px solid var(--primary-light);
+      border-radius: 10px;
+      padding: 12px;
+      background: #fafafa;
+    }
+
+    .arch-flow-arrow {
+      text-align: center;
+      color: #94a3b8;
+      font-size: 14px;
+      margin: -8px 0 8px 0;
+    }
+
+    /* ─── Persona Cards ─────────────────────────────────────────── */
+    .persona-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      background: #ffffff;
+      transition: box-shadow 0.25s;
+    }
+
+    .persona-card.employee-card { border-left: 4px solid var(--employee); }
+    .persona-card.manager-card { border-left: 4px solid var(--manager); }
+    .persona-card.admin-card { border-left: 4px solid var(--admin); }
+
+    .persona-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 16px;
+    }
+
+    .persona-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--foreground);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .persona-badge {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+
+    .employee-badge { color: var(--employee); background: var(--employee-bg); }
+    .manager-badge { color: var(--manager); background: var(--manager-bg); }
+    .admin-badge { color: var(--admin); background: var(--admin-bg); }
+
+    .persona-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .persona-steps-title {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .persona-steps {
+      list-style-type: none;
+    }
+
+    .persona-steps li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+      color: var(--foreground);
+    }
+
+    .persona-steps li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .note-box {
+      background: #fffbeb;
+      border: 1px solid #fef3c7;
+      border-left: 4px solid #f59e0b;
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 13.5px;
+      color: #78350f;
+      margin-bottom: 30px;
+    }
+
+    .note-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ─── CSS Print Optimization ────────────────────────────────── */
+    @media print {
+      body {
+        background-color: #ffffff;
+        padding: 0;
+      }
+      .page {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+      }
+      .no-print {
+        display: none;
+      }
+      .persona-card {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page">
+    <header>
+      <span class="badge-top">AtomQuest Hackathon 1.0</span>
+      <h1>Velora — Performance Portal Submission</h1>
+      <p class="subtitle">Official submission deliverables and evaluation roadmap for the Velora Performance Management System.</p>
+    </header>
+
+    <div class="note-box">
+      <p class="note-title">💡 Frictionless Persona Switching</p>
+      Velora features a built-in <strong>Role-Based Evaluation Workspace</strong>. Evaluators do not need to register accounts or manage credentials. Click <strong>"Select Persona"</strong> on the landing page header to instantly cycle through each active workflow.
+    </div>
+
+    <h2>🌐 1. Live Hosted Demo & Code Repository</h2>
+    <div class="link-group">
+      <div class="link-item">
+        <span class="link-label">Production URL</span>
+        <span class="link-value"><a href="https://velora-704569764751.us-central1.run.app" target="_blank">https://velora-704569764751.us-central1.run.app</a></span>
+      </div>
+      <div class="link-item">
+        <span class="link-label">Hosting Infrastructure</span>
+        <span class="link-value" style="font-size:14px; font-weight:500;">Google Cloud Run (Serverless Container Runtime)</span>
+      </div>
+      <div class="link-item">
+        <span class="link-label">GitHub Repository</span>
+        <span class="link-value"><a href="https://github.com/prakyath006/Velora.git" target="_blank">https://github.com/prakyath006/Velora.git</a></span>
+      </div>
+      <div class="link-item">
+        <span class="link-label">Database Infrastructure</span>
+        <span class="link-value" style="font-size:14px; font-weight:500;">Supabase PostgreSQL (Mumbai Region)</span>
+      </div>
+    </div>
+
+    <h2>📐 2. System Architecture</h2>
+    <div class="arch-diagram">
+      <!-- Presentation -->
+      <div class="arch-layer">
+        <div class="arch-layer-title">📱 Presentation Layer</div>
+        <div class="arch-boxes">
+          <div class="arch-box">🖥️ Employee, Manager & Admin Portals</div>
+          <div class="arch-box">🧪 Evaluation Workspace</div>
+        </div>
+      </div>
+
+      <div class="arch-flow-arrow">⬇️</div>
+
+      <!-- Infrastructure & Logic -->
+      <div class="arch-infra-wrap">
+        <div class="arch-layer-title" style="margin-bottom: 12px; color: var(--primary);">☁️ Infrastructure: Google Cloud Run (Serverless Container)</div>
+        <div class="arch-layer" style="margin-bottom: 0;">
+          <div class="arch-layer-title">⚙️ Business Logic Layer</div>
+          <div class="arch-boxes" style="flex-direction: column; align-items: center; gap: 8px;">
+            <div class="arch-box accent">⚡ Next.js Server Actions & APIs</div>
+            <div class="arch-box">🎯 Goals | ✅ Approvals | 📅 Check-ins | 📊 Reports | 🛡️ RBAC</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="arch-flow-arrow" style="margin-top: 8px;">⬇️</div>
+
+      <!-- Data -->
+      <div class="arch-layer">
+        <div class="arch-layer-title">🗄️ Data Layer</div>
+        <div class="arch-boxes">
+          <div class="arch-box">🔗 Prisma ORM</div>
+          <div class="arch-box db">🐘 Supabase PostgreSQL</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>🧪 3. Persona Evaluation Roadmaps</h2>
+
+    <!-- Employee -->
+    <div class="persona-card employee-card">
+      <div class="persona-header">
+        <div>
+          <div class="persona-title">👤 Priya Sharma</div>
+          <div class="persona-meta">Software Engineer • Engineering Department</div>
+        </div>
+        <span class="persona-badge employee-badge">Employee Journey</span>
+      </div>
+      <div class="persona-steps-title">Recommended Journeys to Test:</div>
+      <ul class="persona-steps">
+        <li>Create and configure an individual goal sheet for the active FY 2026-27 cycle.</li>
+        <li>Assign distinct Units of Measure (UoMs) and relative weights across goals.</li>
+        <li>Log progress updates and outline achievements during the active Q1 Mid-Year Check-in phase.</li>
+      </ul>
+    </div>
+
+    <!-- Manager -->
+    <div class="persona-card manager-card">
+      <div class="persona-header">
+        <div>
+          <div class="persona-title">👥 Vikram Mehta</div>
+          <div class="persona-meta">Engineering Manager • Engineering Department</div>
+        </div>
+        <span class="persona-badge manager-badge">Manager Journey</span>
+      </div>
+      <div class="persona-steps-title">Recommended Journeys to Test:</div>
+      <ul class="persona-steps">
+        <li>Review submitted employee goal sheets (e.g. Priya Sharma) directly in the Manager Approvals dashboard.</li>
+        <li>Approve and automatically lock goal sheets or return them for revision with custom review comments.</li>
+        <li>Oversee team performance metrics, track check-in completion rates, and submit manager evaluations.</li>
+      </ul>
+    </div>
+
+    <!-- HR Admin -->
+    <div class="persona-card admin-card">
+      <div class="persona-header">
+        <div>
+          <div class="persona-title">🛡️ Admin User</div>
+          <div class="persona-meta">HR Administrator • Human Resources Department</div>
+        </div>
+        <span class="persona-badge admin-badge">HR Admin Journey</span>
+      </div>
+      <div class="persona-steps-title">Recommended Journeys to Test:</div>
+      <ul class="persona-steps">
+        <li>Create and toggle performance review cycles, transitioning states between drafting and mid-year lock.</li>
+        <li>Define and distribute shared organization KPIs directly to specific departments.</li>
+        <li>Audit absolute platform operations through the real-time system change compliance log.</li>
+      </ul>
+    </div>
+
+  </div>
+
+</body>
+</html>
