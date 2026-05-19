@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 import { getAllUsers } from './actions';
 
 export interface ClientUser {
@@ -25,6 +26,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [users, setUsers] = useState<ClientUser[]>([]);
   const [currentUser, setCurrentUser] = useState<ClientUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -63,15 +65,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const switchUser = useCallback((userId: string) => {
     const user = users.find(u => u.id === userId);
-    if (user) setCurrentUser(user);
-  }, [users]);
+    if (user) {
+      setCurrentUser(user);
+      router.push('/dashboard');
+    }
+  }, [users, router]);
 
   const switchToRole = useCallback((role: string) => {
     const r = role.toLowerCase();
     localStorage.setItem('velora_selected_role', r);
     const user = users.find(u => u.role === r);
-    if (user) setCurrentUser(user);
-  }, [users]);
+    if (user) {
+      setCurrentUser(user);
+      router.push('/dashboard');
+    }
+  }, [users, router]);
 
   return (
     <AuthContext.Provider value={{ currentUser, switchUser, switchToRole, availableUsers: users, loading }}>
